@@ -68,6 +68,7 @@ public class TaskParametersUtils {
                 return JSONUtils.parseObject(parameter, SqlParameters.class);
             case "MR":
                 return JSONUtils.parseObject(parameter, MapReduceParameters.class);
+            case "DATABUS":
             case "SPARK":
                 return JSONUtils.parseObject(parameter, SparkParameters.class);
             case "PYTHON":

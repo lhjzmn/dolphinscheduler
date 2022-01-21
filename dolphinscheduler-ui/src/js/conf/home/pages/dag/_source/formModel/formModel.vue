@@ -394,6 +394,14 @@
             :backfill-item="backfillItem"
           >
           </m-waterdrop>
+          <m-databus
+            v-if="nodeData.taskType === 'DATABUS'"
+            @on-params="_onParams"
+            @on-cache-params="_onCacheParams"
+            ref="DATABUS"
+            :backfill-item="backfillItem"
+          >
+          </m-databus>
         </div>
         <!-- Pre-tasks in workflow -->
         <m-pre-tasks
@@ -430,6 +438,7 @@
   import mListBox from './tasks/_source/listBox'
   import mShell from './tasks/shell'
   import mWaterdrop from './tasks/waterdrop'
+  import mDatabus from './tasks/databus'
   import mSpark from './tasks/spark'
   import mFlink from './tasks/flink'
   import mPython from './tasks/python'
@@ -964,6 +973,7 @@
       mMr,
       mShell,
       mWaterdrop,
+      mDatabus,
       mSubProcess,
       mProcedure,
       mSql,

@@ -180,9 +180,9 @@ public enum Status {
     MOVE_PROCESS_DEFINITION_ERROR(10150, "move process definition from {0} to {1} error : {2}", "从{0}移动工作流到{1}错误 : {2}"),
     SWITCH_PROCESS_DEFINITION_VERSION_ERROR(10151, "Switch process definition version error", "切换工作流版本出错"),
     SWITCH_PROCESS_DEFINITION_VERSION_NOT_EXIST_PROCESS_DEFINITION_ERROR(10152
-            , "Switch process definition version error: not exists process definition, [process definition id {0}]", "切换工作流版本出错：工作流不存在，[工作流id {0}]"),
+        , "Switch process definition version error: not exists process definition, [process definition id {0}]", "切换工作流版本出错：工作流不存在，[工作流id {0}]"),
     SWITCH_PROCESS_DEFINITION_VERSION_NOT_EXIST_PROCESS_DEFINITION_VERSION_ERROR(10153
-            , "Switch process definition version error: not exists process definition version, [process definition id {0}] [version number {1}]", "切换工作流版本出错：工作流版本信息不存在，[工作流id {0}] [版本号 {1}]"),
+        , "Switch process definition version error: not exists process definition version, [process definition id {0}] [version number {1}]", "切换工作流版本出错：工作流版本信息不存在，[工作流id {0}] [版本号 {1}]"),
     QUERY_PROCESS_DEFINITION_VERSIONS_ERROR(10154, "query process definition versions error", "查询工作流历史版本信息出错"),
     DELETE_PROCESS_DEFINITION_VERSION_ERROR(10156, "delete process definition version error", "删除工作流历史版本出错"),
 
@@ -211,7 +211,7 @@ public enum Status {
     TRANSFORM_PROJECT_OWNERSHIP(10179, "Please transform project ownership [{0}]", "请先转移项目所有权[{0}]"),
     QUERY_ALERT_GROUP_ERROR(10180, "query alert group error", "查询告警组错误"),
     CURRENT_LOGIN_USER_TENANT_NOT_EXIST(10181, "the tenant of the currently login user is not specified", "未指定当前登录用户的租户"),
-
+    QUERY_TABLE_ERROR(10182, "query table error", "查询表错误"),
 
     UDF_FUNCTION_NOT_EXIST(20001, "UDF function not found", "UDF函数不存在"),
     UDF_FUNCTION_EXISTS(20002, "UDF function already exists", "UDF函数已存在"),
@@ -326,13 +326,13 @@ public enum Status {
     PLUGIN_INSTANCE_ALREADY_EXIT(110010, "plugin instance already exit", "该告警插件实例已存在"),
     LIST_PAGING_ALERT_PLUGIN_INSTANCE_ERROR(110011, "query plugin instance page error", "分页查询告警实例失败"),
     DELETE_ALERT_PLUGIN_INSTANCE_ERROR_HAS_ALERT_GROUP_ASSOCIATED(110012, "failed to delete the alert instance, there is an alarm group associated with this alert instance",
-            "删除告警实例失败，存在与此告警实例关联的警报组"),
-    PROCESS_DEFINITION_VERSION_IS_USED(110013,"this process definition version is used","此工作流定义版本被使用"),
+        "删除告警实例失败，存在与此告警实例关联的警报组"),
+    PROCESS_DEFINITION_VERSION_IS_USED(110013, "this process definition version is used", "此工作流定义版本被使用"),
 
     CREATE_ENVIRONMENT_ERROR(120001, "create environment error", "创建环境失败"),
-    ENVIRONMENT_NAME_EXISTS(120002,"this enviroment name [{0}] already exists","环境名称[{0}]已经存在"),
-    ENVIRONMENT_NAME_IS_NULL(120003,"this enviroment name shouldn't be empty.","环境名称不能为空"),
-    ENVIRONMENT_CONFIG_IS_NULL(120004,"this enviroment config shouldn't be empty.","环境配置信息不能为空"),
+    ENVIRONMENT_NAME_EXISTS(120002, "this enviroment name [{0}] already exists", "环境名称[{0}]已经存在"),
+    ENVIRONMENT_NAME_IS_NULL(120003, "this enviroment name shouldn't be empty.", "环境名称不能为空"),
+    ENVIRONMENT_CONFIG_IS_NULL(120004, "this enviroment config shouldn't be empty.", "环境配置信息不能为空"),
     UPDATE_ENVIRONMENT_ERROR(120005, "update environment [{0}] info error", "更新环境[{0}]信息失败"),
     DELETE_ENVIRONMENT_ERROR(120006, "delete environment error", "删除环境信息失败"),
     DELETE_ENVIRONMENT_RELATED_TASK_EXISTS(120007, "this environment has been used in tasks,so you can't delete it.", "该环境已经被任务使用，所以不能删除该环境信息"),
@@ -341,8 +341,8 @@ public enum Status {
     QUERY_ENVIRONMENT_ERROR(1200010, "login user query environment error", "分页查询环境列表错误"),
     VERIFY_ENVIRONMENT_ERROR(1200011, "verify environment error", "验证环境信息错误"),
     ENVIRONMENT_WORKER_GROUPS_IS_INVALID(1200012, "environment worker groups is invalid format", "环境关联的工作组参数解析错误"),
-    UPDATE_ENVIRONMENT_WORKER_GROUP_RELATION_ERROR(1200013,"You can't modify the worker group, because the worker group [{0}] and this environment [{1}] already be used in the task [{2}]",
-            "您不能修改工作组选项，因为该工作组 [{0}] 和 该环境 [{1}] 已经被用在任务 [{2}] 中");
+    UPDATE_ENVIRONMENT_WORKER_GROUP_RELATION_ERROR(1200013, "You can't modify the worker group, because the worker group [{0}] and this environment [{1}] already be used in the task [{2}]",
+        "您不能修改工作组选项，因为该工作组 [{0}] 和 该环境 [{1}] 已经被用在任务 [{2}] 中");
 
 
     private final int code;

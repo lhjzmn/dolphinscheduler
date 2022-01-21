@@ -73,7 +73,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl implements DataSource
     /**
      * create data source
      *
-     * @param loginUser login user
+     * @param loginUser       login user
      * @param datasourceParam datasource parameters
      * @return create result code
      */
@@ -121,7 +121,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl implements DataSource
      * updateProcessInstance datasource
      *
      * @param loginUser login user
-     * @param id data source id
+     * @param id        data source id
      * @return update result code
      */
     @Override
@@ -199,7 +199,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl implements DataSource
         }
         // type
         BaseDataSourceParamDTO baseDataSourceParamDTO = DatasourceUtil.buildDatasourceParamDTO(
-                dataSource.getType(), dataSource.getConnectionParams());
+            dataSource.getType(), dataSource.getConnectionParams());
         baseDataSourceParamDTO.setId(dataSource.getId());
         baseDataSourceParamDTO.setName(dataSource.getName());
         baseDataSourceParamDTO.setNote(dataSource.getNote());
@@ -214,8 +214,8 @@ public class DataSourceServiceImpl extends BaseServiceImpl implements DataSource
      *
      * @param loginUser login user
      * @param searchVal search value
-     * @param pageNo page number
-     * @param pageSize page size
+     * @param pageNo    page number
+     * @param pageSize  page size
      * @return data source list page
      */
     @Override
@@ -266,7 +266,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl implements DataSource
      * query data resource list
      *
      * @param loginUser login user
-     * @param type data source type
+     * @param type      data source type
      * @return data source list page
      */
     @Override
@@ -309,9 +309,8 @@ public class DataSourceServiceImpl extends BaseServiceImpl implements DataSource
     /**
      * check connection
      *
-     * @param type data source type
+     * @param type            data source type
      * @param connectionParam connectionParam
-     * @return true if connect successfully, otherwise false
      * @return true if connect successfully, otherwise false
      */
     @Override
@@ -350,7 +349,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl implements DataSource
     /**
      * delete datasource
      *
-     * @param loginUser login user
+     * @param loginUser    login user
      * @param datasourceId data source id
      * @return delete result code
      */
@@ -384,7 +383,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl implements DataSource
      * unauthorized datasource
      *
      * @param loginUser login user
-     * @param userId user id
+     * @param userId    user id
      * @return unauthed data source result code
      */
     @Override
@@ -425,7 +424,7 @@ public class DataSourceServiceImpl extends BaseServiceImpl implements DataSource
      * authorized datasource
      *
      * @param loginUser login user
-     * @param userId user id
+     * @param userId    user id
      * @return authorized result code
      */
     @Override
@@ -443,4 +442,35 @@ public class DataSourceServiceImpl extends BaseServiceImpl implements DataSource
         return result;
     }
 
+    @Override
+    public Map<String, Object> getTableByDsId(User loginUser, Long dsId) {
+        Map<String, Object> result = new HashMap<>();
+        DataSource dataSource = dataSourceMapper.selectById(dsId);
+        List<String> tables = new ArrayList<>();
+        switch (dataSource.getType().getCode()) {
+            case 0:
+                String oldConnectionParams = dataSource.getConnectionParams();
+                ObjectNode oldParams = JSONUtils.parseObject(oldConnectionParams);
+                String user = oldParams.path("user").asText();
+                String password = oldParams.path("password").asText();
+                String jdbcUrl = oldParams.path("jdbcUrl").asText();
+                String database = oldParams.path("database").asText();
+                try {
+                    tables = DatasourceUtil.getMySqlTables(jdbcUrl, database, "*", user, password);
+                } catch (Exception e) {
+                    putMsg(result, Status.QUERY_TABLE_ERROR);
+                    return result;
+                }
+                break;
+            case 2:
+
+            case 10:
+
+            default: //可选
+
+        }
+        result.put(Constants.DATA_LIST, tables);
+        putMsg(result, Status.SUCCESS);
+        return result;
+    }
 }

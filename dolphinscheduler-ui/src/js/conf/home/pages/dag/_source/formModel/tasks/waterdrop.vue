@@ -21,50 +21,10 @@
       <div slot="text">{{$t('Deploy Mode')}}</div>
       <div slot="content">
         <el-radio-group size="small" v-model="deployMode">
-          <el-radio :label="'client'" :disabled="isDetails"></el-radio>
+<!--          <el-radio :label="'client'" :disabled="isDetails"></el-radio>-->
           <el-radio :label="'cluster'" :disabled="isDetails"></el-radio>
-          <el-radio :label="'local'" :disabled="isDetails"></el-radio>
+<!--          <el-radio :label="'local'" :disabled="isDetails"></el-radio>-->
         </el-radio-group>
-      </div>
-    </m-list-box>
-    <!--master-->
-    <m-list-box v-if="deployMode !== 'local'">
-      <div slot="text">{{$t('Master')}}</div>
-      <div slot="content" class="display-flex">
-        <el-select
-          size="small"
-          v-model="master"
-          :disabled="isDetails">
-          <el-option
-            v-for="city in masterType"
-            :key="city.code"
-            :value="city.code"
-            :label="city.code">
-          </el-option>
-        </el-select>
-        <el-input
-          :disabled="isDetails"
-          type="input"
-          size="small"
-          v-model="masterUrl"
-          :placeholder="$t('Please Enter Url')"
-          class="cont-extra"
-          v-if="masterUrlState">
-        </el-input>
-      </div>
-    </m-list-box>
-    <!--queue-->
-    <m-list-box v-if="deployMode !== 'local' && master === 'yarn'">
-      <div slot="text">{{$t('Queue')}}</div>
-      <div slot="content">
-        <el-input
-          :disabled="isDetails"
-          type="input"
-          size="small"
-          v-model="queue"
-          :placeholder="$t('Please enter queue value')"
-          style="width: 192px;">
-        </el-input>
       </div>
     </m-list-box>
     <!--config file-->
@@ -117,7 +77,7 @@
         // resource(list)
         resourceList: [],
         // Deployment method
-        deployMode: 'client',
+        deployMode: 'cluster',
         // Deployment master
         queue: 'default',
         // Deployment master

@@ -24,6 +24,7 @@ import static org.apache.dolphinscheduler.api.enums.Status.CREATE_DATASOURCE_ERR
 import static org.apache.dolphinscheduler.api.enums.Status.DELETE_DATA_SOURCE_FAILURE;
 import static org.apache.dolphinscheduler.api.enums.Status.KERBEROS_STARTUP_STATE;
 import static org.apache.dolphinscheduler.api.enums.Status.QUERY_DATASOURCE_ERROR;
+import static org.apache.dolphinscheduler.api.enums.Status.QUERY_TABLE_ERROR;
 import static org.apache.dolphinscheduler.api.enums.Status.UNAUTHORIZED_DATASOURCE;
 import static org.apache.dolphinscheduler.api.enums.Status.UPDATE_DATASOURCE_ERROR;
 import static org.apache.dolphinscheduler.api.enums.Status.VERIFY_DATASOURCE_NAME_FAILURE;
@@ -42,6 +43,7 @@ import org.apache.dolphinscheduler.plugin.datasource.api.utils.DatasourceUtil;
 import org.apache.dolphinscheduler.spi.datasource.ConnectionParam;
 import org.apache.dolphinscheduler.spi.enums.DbType;
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,6 +161,27 @@ public class DataSourceController extends BaseController {
     public Result queryDataSourceList(@ApiIgnore @RequestAttribute(value = Constants.SESSION_USER) User loginUser,
                                       @RequestParam("type") DbType type) {
         Map<String, Object> result = dataSourceService.queryDataSourceList(loginUser, type.ordinal());
+        return returnDataList(result);
+    }
+
+    /**
+     * 根据数据源来获取所有有权限的表
+     *
+     * @param loginUser login user
+     * @param dsId data source id
+     * @return table list
+     */
+    @ApiOperation(value = "getTableByDsId", notes = "")
+    @ApiImplicitParams({
+        @ApiImplicitParam(name = "id", value = "", required = true, dataType = "Long")
+    })
+    @GetMapping(value = "/{id}/getTableByDsId")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiException(QUERY_TABLE_ERROR)
+    @AccessLogAnnotation(ignoreRequestArgs = "loginUser")
+    public Result getTableByDsId(@ApiIgnore @RequestAttribute(value = Constants.SESSION_USER) User loginUser,
+                                      @RequestParam("id") Long dsId) {
+        Map<String, Object> result = dataSourceService.getTableByDsId(loginUser, dsId);
         return returnDataList(result);
     }
 

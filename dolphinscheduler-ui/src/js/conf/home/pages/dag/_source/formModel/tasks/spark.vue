@@ -76,8 +76,8 @@
       <div slot="content">
         <el-radio-group v-model="deployMode" size="small">
           <el-radio :label="'cluster'" :disabled="isDetails"></el-radio>
-          <el-radio :label="'client'" :disabled="isDetails"></el-radio>
-          <el-radio :label="'local'" :disabled="isDetails"></el-radio>
+<!--          <el-radio :label="'client'" :disabled="isDetails"></el-radio>-->
+<!--          <el-radio :label="'local'" :disabled="isDetails"></el-radio>-->
         </el-radio-group>
       </div>
     </m-list-box>

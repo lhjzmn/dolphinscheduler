@@ -22,14 +22,27 @@ import org.apache.dolphinscheduler.plugin.datasource.api.datasource.DatasourcePr
 import org.apache.dolphinscheduler.plugin.datasource.api.datasource.clickhouse.ClickHouseDatasourceProcessor;
 import org.apache.dolphinscheduler.plugin.datasource.api.datasource.db2.Db2DatasourceProcessor;
 import org.apache.dolphinscheduler.plugin.datasource.api.datasource.hive.HiveDatasourceProcessor;
+import org.apache.dolphinscheduler.plugin.datasource.api.datasource.mysql.MysqlConnectionParam;
 import org.apache.dolphinscheduler.plugin.datasource.api.datasource.mysql.MysqlDatasourceProcessor;
 import org.apache.dolphinscheduler.plugin.datasource.api.datasource.oracle.OracleDatasourceProcessor;
 import org.apache.dolphinscheduler.plugin.datasource.api.datasource.postgresql.PostgreSqlDatasourceProcessor;
 import org.apache.dolphinscheduler.plugin.datasource.api.datasource.presto.PrestoDatasourceProcessor;
 import org.apache.dolphinscheduler.plugin.datasource.api.datasource.spark.SparkDatasourceProcessor;
 import org.apache.dolphinscheduler.plugin.datasource.api.datasource.sqlserver.SqlServerDatasourceProcessor;
+import org.apache.dolphinscheduler.plugin.datasource.api.plugin.DataSourceClientProvider;
 import org.apache.dolphinscheduler.spi.datasource.ConnectionParam;
 import org.apache.dolphinscheduler.spi.enums.DbType;
+
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,7 +80,7 @@ public class DatasourceUtil {
      */
     public static ConnectionParam buildConnectionParams(BaseDataSourceParamDTO baseDataSourceParamDTO) {
         ConnectionParam connectionParams = getDatasourceProcessor(baseDataSourceParamDTO.getType())
-                .createConnectionParams(baseDataSourceParamDTO);
+            .createConnectionParams(baseDataSourceParamDTO);
         if (logger.isDebugEnabled()) {
             logger.info("parameters map:{}", connectionParams);
         }
@@ -116,5 +129,51 @@ public class DatasourceUtil {
      */
     public static String getDatasourceUniqueId(ConnectionParam connectionParam, DbType dbType) {
         return getDatasourceProcessor(dbType).getDatasourceUniqueId(connectionParam, dbType);
+    }
+
+    public static List<String> getMySqlTables(String url, String database, String tablePattern, String user, String password) throws Exception {
+        List<String> tables = new ArrayList<>();
+        MysqlConnectionParam connectionParam = new MysqlConnectionParam();
+        connectionParam.setJdbcUrl(url);
+        connectionParam.setUser(user);
+        connectionParam.setPassword(password);
+        Connection conn = DataSourceClientProvider.getInstance().getConnection(DbType.MYSQL, connectionParam);
+        ResultSet rs = null;
+        try {
+            DatabaseMetaData dmd = conn.getMetaData();
+            rs = dmd.getTables(database, user.toUpperCase(), null, new String[] {"TABLE"});
+            while (rs.next()) {
+                if (Pattern.matches(tablePattern, rs.getString("TABLE_NAME"))) {
+                    tables.add(rs.getString("TABLE_NAME"));
+                }
+            }
+        } finally {
+            close(conn, null, rs);
+        }
+        return tables;
+    }
+
+    private static void close(Connection conn, Statement stmt, ResultSet rs) {
+        if (rs != null) {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        if (stmt != null) {
+            try {
+                stmt.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

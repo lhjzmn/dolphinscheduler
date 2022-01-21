@@ -15,37 +15,24 @@
  * limitations under the License.
  */
 
-package org.apache.dolphinscheduler.spi.enums;
+package org.apache.dolphinscheduler.plugin.task.databus;
 
-import static java.util.stream.Collectors.toMap;
+public enum SparkVersion {
 
-import java.util.Arrays;
-import java.util.Map;
+    /**
+     * 0 SPARK1
+     * 1 SPARK2
+     */
+    SPARK1(0, "SPARK1"),
+    SPARK2(1, "SPARK2");
 
-import com.baomidou.mybatisplus.annotation.EnumValue;
-import com.google.common.base.Functions;
-
-public enum DbType {
-    MYSQL(0, "mysql"),
-    POSTGRESQL(1, "postgresql"),
-    HIVE(2, "hive"),
-    SPARK(3, "spark"),
-    CLICKHOUSE(4, "clickhouse"),
-    ORACLE(5, "oracle"),
-    SQLSERVER(6, "sqlserver"),
-    DB2(7, "db2"),
-    PRESTO(8, "presto"),
-    H2(9, "h2"),
-    ICEBERG(10, "iceberg");
-
-    @EnumValue
-    private final int code;
-    private final String descp;
-
-    DbType(int code, String descp) {
+    SparkVersion(int code, String descp) {
         this.code = code;
         this.descp = descp;
     }
+
+    private final int code;
+    private final String descp;
 
     public int getCode() {
         return code;
@@ -54,15 +41,4 @@ public enum DbType {
     public String getDescp() {
         return descp;
     }
-
-    private static final Map<Integer, DbType> DB_TYPE_MAP =
-        Arrays.stream(DbType.values()).collect(toMap(DbType::getCode, Functions.identity()));
-
-    public static DbType of(int type) {
-        if (DB_TYPE_MAP.containsKey(type)) {
-            return DB_TYPE_MAP.get(type);
-        }
-        return null;
-    }
-
 }
